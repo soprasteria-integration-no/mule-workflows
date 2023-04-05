@@ -11,10 +11,6 @@ on:
         required: true
         type: string
         description: Mule environment to use, this is used for config file and naming for app name
-      properties:
-        required: true
-        type: string
-        description: Other properties that you want to use for the application
   
 jobs:
   deploy:
