@@ -1,0 +1,42 @@
+name: Reusable Mule Pipeline Build Template
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        type: string
+      mule-env:
+        required: true
+        type: string
+  
+jobs:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:    
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+    - name: Deploy to Sandbox
+      env:
+        CLIENT_ID: ${{ secrets.anypoint_client_id }}
+        CLIENT_SECRET: ${{ secrets.anypoint_client_secret }}
+        NAME: ${{ github.event.repository.name }}
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        mvn deploy -DskipMunitTests -DmuleDeploy \
+         -Dmule.artifact=$artifactName \
+         -Danypoint.client_id="$CLIENT_ID" \
+         -Danypoint.client_secret="$CLIENT_SECRET" \
+         -Denv=${{ inputs.env }} \
+         -Dmule-env=${{ inputs.mule-env }} \
