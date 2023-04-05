@@ -36,13 +36,15 @@ jobs:
           path: target/*.jar
         
   deploy-sandbox:
+    needs: build
     uses: ./.github/workflows/build-temp.yaml
     with:
-      env: Sandbox
+      env: sandbox
       mule-env: test
 
   deploy-production:
+    needs: deploy-sandbox
     uses: ./.github/workflows/build-temp.yaml
     with:
-      env: Production
+      env: production
       mule-env: prod
