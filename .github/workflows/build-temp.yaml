@@ -29,11 +29,10 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    - name: Deploy to Sandbox
+    - name: Deploy to ${{ inputs.env }}
       env:
         CLIENT_ID: ${{ secrets.anypoint_client_id }}
         CLIENT_SECRET: ${{ secrets.anypoint_client_secret }}
-        NAME: ${{ github.event.repository.name }}
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
