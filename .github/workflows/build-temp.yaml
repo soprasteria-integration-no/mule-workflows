@@ -11,6 +11,10 @@ on:
         required: true
         type: string
         description: Mule environment to use, this is used for config file and naming for app name
+      properties:
+        required: true
+        type: string
+        description: Other properties that you want to use for the application
   
 jobs:
   deploy:
@@ -41,3 +45,4 @@ jobs:
          -Danypoint.client_secret="$CLIENT_SECRET" \
          -Denv=${{ inputs.env }} \
          -Dmule-env=${{ inputs.mule-env }} \
+         ${{ inputs.properties }} \
