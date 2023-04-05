@@ -29,6 +29,10 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+    - name: Extract Properties
+      run: |
+        echo ::set-env name=properties::$(yq eval ".Sandbox" "arg.yml")
+      shell: bash
     - name: Deploy to ${{ inputs.env }}
       env:
         CLIENT_ID: ${{ secrets.anypoint_client_id }}
@@ -41,4 +45,4 @@ jobs:
          -Danypoint.client_secret="$CLIENT_SECRET" \
          -Denv=${{ inputs.env }} \
          -Dmule-env=${{ inputs.mule-env }} \
-         ${{ inputs.properties }} \
+         ${{ env.properties }} \
