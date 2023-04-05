@@ -38,6 +38,7 @@ jobs:
   deploy-sandbox:
     needs: build
     uses: ./.github/workflows/build-temp.yaml
+    secrets: inherit
     with:
       env: sandbox
       mule-env: test
@@ -45,6 +46,7 @@ jobs:
   deploy-production:
     needs: deploy-sandbox
     uses: ./.github/workflows/build-temp.yaml
+    secrets: inherit
     with:
       env: production
       mule-env: prod
