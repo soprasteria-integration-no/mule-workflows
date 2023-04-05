@@ -6,13 +6,16 @@ on:
       env:
         required: true
         type: string
+        description: Environment to deploy to in Runtime Manager
       mule-env:
         required: true
         type: string
+        description: Mule environment to use, this is used for config file and naming for app name
   
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
     steps:    
     - name: Checkout this repo
       uses: actions/checkout@v3
