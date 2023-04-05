@@ -37,6 +37,12 @@ jobs:
         
   deploy-sandbox:
     uses: ./.github/workflows/build-temp.yaml
+    with:
+      env: Sandbox
+      mule-env: test
 
   deploy-production:
     uses: ./.github/workflows/build-temp.yaml
+    with:
+      env: Production
+      mule-env: prod
