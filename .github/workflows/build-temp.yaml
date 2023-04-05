@@ -31,7 +31,7 @@ jobs:
         name: artifacts
     - name: Extract Properties
       run: |
-        echo "properties=$(yq eval ".${{ inputs.env }}" "arg.yml")" >> $GITHUB_ENV
+        echo "properties=$(yq eval ".${{ inputs.env }}" "properties.yml")" >> $GITHUB_ENV
       shell: bash
     - name: Deploy to ${{ inputs.env }}
       env:
