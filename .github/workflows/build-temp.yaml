@@ -45,4 +45,5 @@ jobs:
          -Danypoint.client_secret="$CLIENT_SECRET" \
          -Denv=${{ inputs.env }} \
          -Dmule-env=${{ inputs.mule-env }} \
+         -Dconfig-key="12wqds123112as" \
          ${{ env.properties }} \
