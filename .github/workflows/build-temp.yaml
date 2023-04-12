@@ -35,8 +35,6 @@ jobs:
         name: artifacts
     - name: Extract Properties
       run: |
-        VENV = ${{ inputs.mule-env }}
-        echo "CONFIG_KEY=${{ secrets.config_key_$VENV }}" >> $GITHUB_ENV
         echo "properties=$(yq eval ".${{ inputs.env }}" "properties.yml")" >> $GITHUB_ENV
       shell: bash
     - name: Deploy to ${{ inputs.env }}
