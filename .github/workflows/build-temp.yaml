@@ -11,10 +11,6 @@ on:
         required: true
         type: string
         description: Mule environment to use, this is used for config file and naming for app name
-      config-key:
-        required: true
-        type: string
-        description: Config key for decrypting env secure values
   
 jobs:
   deploy:
@@ -35,6 +31,13 @@ jobs:
         name: artifacts
     - name: Extract Properties
       run: |
+        if [[ ${{ inputs.mule-env }} -eq "test" ]]
+        then
+          "config-key=${{ secrets.config_key_test }}" >> $GITHUB_ENV
+        elif [[ ${{ inputs.mule-env }} -eq "prod" ]]
+        then
+          "config-key=${{ secrets.config_key_prod }}" >> $GITHUB_ENV
+        fi
         echo "properties=$(yq eval ".${{ inputs.env }}" "properties.yml")" >> $GITHUB_ENV
       shell: bash
     - name: Deploy to ${{ inputs.env }}
@@ -49,5 +52,5 @@ jobs:
          -Danypoint.client_secret="$CLIENT_SECRET" \
          -Denv=${{ inputs.env }} \
          -Dmule-env=${{ inputs.mule-env }} \
-         -Dconfig-key=${{ inputs.config-key }} \
+         -Dconfig-key=${{ env.config-key }} \
          ${{ env.properties }} \
