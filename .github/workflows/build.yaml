@@ -42,7 +42,6 @@ jobs:
     with:
       env: Sandbox
       mule-env: test
-      config-key: ${{ secrets.config_key_test }}
 
   deploy-production:
     needs: deploy-sandbox
@@ -51,4 +50,3 @@ jobs:
     with:
       env: Production
       mule-env: prod
-      config-key: ${{ secrets.config_key_prod }}
