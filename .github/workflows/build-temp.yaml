@@ -31,13 +31,14 @@ jobs:
         name: artifacts
     - name: Extract Properties
       run: |
+        VENV = ${{ inputs.mule-env }}
+        echo "CONFIG_KEY=${{ secrets.config_key_$VENV }}" >> $GITHUB_ENV
         echo "properties=$(yq eval ".${{ inputs.env }}" "properties.yml")" >> $GITHUB_ENV
       shell: bash
     - name: Deploy to ${{ inputs.env }}
       env:
         CLIENT_ID: ${{ secrets.anypoint_client_id }}
         CLIENT_SECRET: ${{ secrets.anypoint_client_secret }}
-        CONFIG_KEY: ${{ secrets.config_key_${{ inputs.mule-env }} }}
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DskipMunitTests -DmuleDeploy \
@@ -46,5 +47,5 @@ jobs:
          -Danypoint.client_secret="$CLIENT_SECRET" \
          -Denv=${{ inputs.env }} \
          -Dmule-env=${{ inputs.mule-env }} \
-         -Dconfig-key=$CONFIG_KEY \
+         -Dconfig-key=${{ env.CONFIG_KEY }} \
          ${{ env.properties }} \
