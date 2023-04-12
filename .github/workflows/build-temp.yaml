@@ -29,15 +29,17 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+    - name: Extract secret
+      run: |
+        if [[ ${{ inputs.mule-env }} -eq test ]]
+        then
+          echo "config-key=${{ secrets.config_key_test }}" >> $GITHUB_ENV
+        elif [[ ${{ inputs.mule-env }} -eq prod ]]
+        then
+          echo "config-key=${{ secrets.config_key_prod }}" >> $GITHUB_ENV
+        fi
     - name: Extract Properties
       run: |
-        if [[ ${{ inputs.mule-env }} -eq "test" ]]
-        then
-          "config-key=${{ secrets.config_key_test }}" >> $GITHUB_ENV
-        elif [[ ${{ inputs.mule-env }} -eq "prod" ]]
-        then
-          "config-key=${{ secrets.config_key_prod }}" >> $GITHUB_ENV
-        fi
         echo "properties=$(yq eval ".${{ inputs.env }}" "properties.yml")" >> $GITHUB_ENV
       shell: bash
     - name: Deploy to ${{ inputs.env }}
